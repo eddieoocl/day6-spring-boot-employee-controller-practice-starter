@@ -142,4 +142,20 @@ class EmployeeControllerTest {
         assertThat(employee.getAge()).isEqualTo(targetEmployee.getAge());
         assertThat(employee.getSalary()).isEqualTo(targetEmployee.getSalary());
     }
+
+    @Test
+    void should_delete_employee_when_delete_employee_given_id() throws Exception {
+        //When
+        //Then
+
+        int originalSize = employeeRepository.getAll().size();
+
+        client.perform(MockMvcRequestBuilders.delete("/employees/1"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andReturn().getResponse().getContentAsString();
+
+        int newSize = employeeRepository.getAll().size();
+
+        assertThat(originalSize - 1).isEqualTo(newSize);
+    }
 }
