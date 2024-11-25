@@ -32,4 +32,11 @@ public class EmployRepository {
         return employees.stream()
                 .filter(employee -> employee.getGender()==gender).collect(Collectors.toList());
     }
+
+    public Employee create(Employee employee) {
+        employee.setId(employees.size()+1);
+        employees.add(employee);
+        return employee;
+//         return employees.get(0);
+    }
 }

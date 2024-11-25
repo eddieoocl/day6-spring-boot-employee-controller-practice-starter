@@ -4,6 +4,7 @@ import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.model.Gender;
 import com.oocl.springbootemployee.repository.EmployRepository;
 import jakarta.websocket.server.PathParam;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,12 @@ public class EmployeeController {
     @GetMapping(params = {"gender"})
     public List<Employee> getByGender(@RequestParam Gender gender){
         return employRepository.getByGender(gender);
+    }
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @PostMapping
+    public Employee create(@RequestBody Employee employee){
+        return employRepository.create(employee);
     }
 
 }

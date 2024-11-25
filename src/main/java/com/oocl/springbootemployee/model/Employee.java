@@ -1,6 +1,7 @@
 package com.oocl.springbootemployee.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Employee {
     private Integer id;
@@ -55,5 +56,18 @@ public class Employee {
 
     public void setSalary(Double salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
