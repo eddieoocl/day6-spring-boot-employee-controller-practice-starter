@@ -24,23 +24,23 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employeeId}")
-    public Employee getById(@PathVariable("employeeId") Integer employeeId){
+    public Employee getById(@PathVariable("employeeId") Integer employeeId) {
         return employRepository.getById(employeeId);
     }
 
     @DeleteMapping("/{employeeId}")
-    public boolean deleteById(@PathVariable("employeeId")Integer employeeId){
+    public boolean deleteById(@PathVariable("employeeId") Integer employeeId) {
         return employRepository.deleteById(employeeId);
     }
 
     @GetMapping(params = {"gender"})
-    public List<Employee> getByGender(@RequestParam Gender gender){
+    public List<Employee> getByGender(@RequestParam Gender gender) {
         return employRepository.getByGender(gender);
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
-    public Employee create(@RequestBody Employee employee){
+    public Employee create(@RequestBody Employee employee) {
         return employRepository.create(employee);
     }
 

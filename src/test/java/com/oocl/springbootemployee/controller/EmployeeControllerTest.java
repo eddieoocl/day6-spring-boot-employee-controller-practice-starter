@@ -42,12 +42,13 @@ class EmployeeControllerTest {
     JacksonTester<Employee> json;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         employRepository.getAll().clear();
 //        employRepository.save(new Employee(1,"name1", 15,Gender.FEMALE,18.0));
 //        employRepository.save(new Employee(2,"name2", 15,Gender.MALE,18.0));
 //        employRepository.save(new Employee(3,"name3", 15,Gender.FEMALE,18.0));
-        }
+    }
+
     @Test
     void should_return_employees_when_getAll_given_employeeRepository() throws Exception {
         //Given
@@ -114,8 +115,8 @@ class EmployeeControllerTest {
         String employeeJsonString = client.perform(MockMvcRequestBuilders.post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employeeJson))
-                        .andExpect(MockMvcResultMatchers.status().isCreated())
-                        .andReturn().getResponse().getContentAsString();
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andReturn().getResponse().getContentAsString();
 
         Employee employee = json.parseObject(employeeJsonString);
         assertThat(employee).usingRecursiveComparison().isEqualTo(newEmployee);
