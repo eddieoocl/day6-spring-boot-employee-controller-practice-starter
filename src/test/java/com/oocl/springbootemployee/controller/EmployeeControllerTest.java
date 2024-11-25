@@ -27,6 +27,7 @@ import static org.hamcrest.Matchers.hasSize;
 class EmployeeControllerTest {
     @Autowired
     private MockMvc client;
+
     @Autowired
     private EmployeeRepository employeeRepository;
 
@@ -39,58 +40,57 @@ class EmployeeControllerTest {
     @BeforeEach
     void setup() {
         employeeRepository.getAll().clear();
-//        employRepository.save(new Employee(1,"name1", 15,Gender.FEMALE,18.0));
-//        employRepository.save(new Employee(2,"name2", 15,Gender.MALE,18.0));
-//        employRepository.save(new Employee(3,"name3", 15,Gender.FEMALE,18.0));
+        employeeRepository.create(new Employee(1, "name1", 15, Gender.FEMALE, 18.0));
+        employeeRepository.create(new Employee(2, "name2", 15, Gender.MALE, 18.0));
+        employeeRepository.create(new Employee(3, "name3", 15, Gender.FEMALE, 18.0));
     }
 
     @Test
     void should_return_employees_when_getAll_given_employeeRepository() throws Exception {
-        //Given
+        // Given
         final List<Employee> givenEmployees = employeeRepository.getAll();
-        //When
-        client.perform(MockMvcRequestBuilders.get("/employees"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value(givenEmployees.get(0).getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value(givenEmployees.get(1).getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value(givenEmployees.get(2).getName()));
-        //Then
 
+        // When
+        // Then
+        String employeesJsonString = client.perform(MockMvcRequestBuilders.get("/employees"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(givenEmployees.size())))
+                .andReturn().getResponse().getContentAsString();
+
+        List<Employee> employees = jsonList.parseObject(employeesJsonString);
+        assertThat(employees).usingRecursiveComparison().isEqualTo(givenEmployees);
     }
 
     @Test
     void should_return_employee_when_getById_given_employeeId() throws Exception {
-        //Given
+        // Given
         final Employee givenEmployee = employeeRepository.getById(1);
-        //When
-        client.perform(MockMvcRequestBuilders.get("/employees/1"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(givenEmployee.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(givenEmployee.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value(givenEmployee.getGender().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(givenEmployee.getSalary()));
-        //Then
 
+        // When
+        // Then
+        String employeeJsonString = client.perform(MockMvcRequestBuilders.get("/employees/{id}", 1))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        Employee employee = json.parseObject(employeeJsonString);
+        assertThat(employee).isEqualTo(givenEmployee);
     }
 
     @Test
     void should_return_male_employee_when_getByGender_given_male() throws Exception {
-        //Given
+        // Given
         final List<Employee> givenEmployees = employeeRepository.getByGender(Gender.MALE);
 
-        //When
-        String employeeJsonString = client.perform(MockMvcRequestBuilders.get("/employees").queryParam("gender", "MALE"))
+        // When
+        // Then
+        String employeesJsonString = client.perform(MockMvcRequestBuilders.get("/employees")
+                        .param("gender", "MALE"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(givenEmployees.size())))
                 .andReturn().getResponse().getContentAsString();
 
-        List<Employee> employees = jsonList.parseObject(employeeJsonString);
-
+        List<Employee> employees = jsonList.parseObject(employeesJsonString);
         assertThat(employees).usingRecursiveComparison().isEqualTo(givenEmployees);
-
-        //Then
-
     }
 
     @Test
@@ -102,11 +102,10 @@ class EmployeeControllerTest {
                 "        \"gender\": \"FEMALE\",\n" +
                 "        \"salary\": 18.0\n" +
                 "    }";
-        Employee newEmployee = new Employee(1, "name1", 15, Gender.FEMALE, 18.0);
-
-//        final Employee givenEmployee = employRepository.create(newEmployee);
+        Employee newEmployee = new Employee(4, "name1", 15, Gender.FEMALE, 18.0);
 
         //When
+        //Then
         String employeeJsonString = client.perform(MockMvcRequestBuilders.post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employeeJson))
@@ -115,8 +114,6 @@ class EmployeeControllerTest {
 
         Employee employee = json.parseObject(employeeJsonString);
         assertThat(employee).usingRecursiveComparison().isEqualTo(newEmployee);
-        //Then
-
     }
 
 //
