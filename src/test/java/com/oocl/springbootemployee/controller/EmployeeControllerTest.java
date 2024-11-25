@@ -158,4 +158,22 @@ class EmployeeControllerTest {
 
         assertThat(originalSize - 1).isEqualTo(newSize);
     }
+
+    @Test
+    void should_return_employees_when_paginate_given_page_and_size() throws Exception {
+        // Given
+        final List<Employee> givenEmployees = employeeRepository.paginate(1, 2);
+
+        // When
+        // Then
+        String employeesJsonString = client.perform(MockMvcRequestBuilders.get("/employees")
+                        .param("page", "1")
+                        .param("size", "2"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(givenEmployees.size())))
+                .andReturn().getResponse().getContentAsString();
+
+        List<Employee> employees = employeesJacksonTester.parseObject(employeesJsonString);
+        assertThat(employees).usingRecursiveComparison().isEqualTo(givenEmployees);
+    }
 }

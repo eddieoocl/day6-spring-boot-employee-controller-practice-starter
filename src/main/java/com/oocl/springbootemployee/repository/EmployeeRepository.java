@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Repository
 public class EmployeeRepository {
     private final List<Employee> employees = new ArrayList<>();
@@ -48,5 +49,15 @@ public class EmployeeRepository {
 
     public void delete(int id) {
         employees.removeIf(employee -> employee.getId() == id);
+    }
+
+    public List<Employee> paginate(int page, int size) {
+        try {
+            int fromIndex = Math.max(0, Math.min((page - 1) * size, employees.size()));
+            int toIndex = Math.max(0, Math.min(page * size, employees.size()));
+            return employees.subList(fromIndex, toIndex);
+        } catch (IndexOutOfBoundsException exception) {
+            return new ArrayList<>();
+        }
     }
 }
