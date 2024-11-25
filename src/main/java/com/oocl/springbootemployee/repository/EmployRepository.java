@@ -22,4 +22,7 @@ public class EmployRepository {
         return employees.stream().filter(employee -> employee.getId()==employeeId).findFirst().orElse(null);
     }
 
+    public boolean deleteById(Integer employeeId) {
+        return employees.removeIf(employee -> employee.getId()==employeeId);
+    }
 }

@@ -2,10 +2,7 @@ package com.oocl.springbootemployee.controller;
 
 import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.repository.EmployRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +23,11 @@ public class EmployeeController {
     @GetMapping("/{employeeId}")
     public Employee getById(@PathVariable("employeeId") Integer employeeId){
         return employRepository.getById(employeeId);
+    }
+
+    @DeleteMapping("/{employeeId}")
+    public boolean deleteById(@PathVariable("employeeId")Integer employeeId){
+        return employRepository.deleteById(employeeId);
     }
 
 
