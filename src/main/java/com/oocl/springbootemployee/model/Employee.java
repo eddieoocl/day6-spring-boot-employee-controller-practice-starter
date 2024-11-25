@@ -1,6 +1,6 @@
 package com.oocl.springbootemployee.model;
 
-import java.math.BigDecimal;
+
 import java.util.Objects;
 
 public class Employee {
@@ -16,10 +16,6 @@ public class Employee {
         this.age = age;
         this.gender = gender;
         this.salary = salary;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
     }
 
     public Integer getId() {
@@ -40,6 +36,10 @@ public class Employee {
 
     public Integer getAge() {
         return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public Gender getGender() {
@@ -68,6 +68,6 @@ public class Employee {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hashCode(id);
     }
 }
