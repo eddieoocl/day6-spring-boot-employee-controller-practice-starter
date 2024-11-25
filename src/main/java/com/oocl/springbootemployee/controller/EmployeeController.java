@@ -23,6 +23,10 @@ public class EmployeeController {
         return employRepository.getAll();
     }
 
+    @GetMapping("/{employeeId}")
+    public Employee getById(@PathVariable("employeeId") Integer employeeId){
+        return employRepository.getById(employeeId);
+    }
 
 
 }
