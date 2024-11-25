@@ -1,7 +1,9 @@
 package com.oocl.springbootemployee.controller;
 
 import com.oocl.springbootemployee.model.Employee;
+import com.oocl.springbootemployee.model.Gender;
 import com.oocl.springbootemployee.repository.EmployRepository;
+import jakarta.websocket.server.PathParam;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,5 +32,9 @@ public class EmployeeController {
         return employRepository.deleteById(employeeId);
     }
 
+    @GetMapping(params = {"gender"})
+    public List<Employee> getByGender(@RequestParam Gender gender){
+        return employRepository.getByGender(gender);
+    }
 
 }
