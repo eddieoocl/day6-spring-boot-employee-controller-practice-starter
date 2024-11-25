@@ -36,6 +36,21 @@ class EmployeeControllerTest {
     //Then
 
     }
+
+    @Test
+    void should_return_employee_when_getById_given_employeeId()throws Exception{
+        //Given
+        final Employee givenEmployee=employRepository.getById(1);
+        //When
+        client.perform(MockMvcRequestBuilders.get("/employees/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(givenEmployee.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(givenEmployee.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value(givenEmployee.getGender().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(givenEmployee.getSalary()));
+        //Then
+
+    }
     @Test
     void getAll() {
     }
