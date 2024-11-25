@@ -4,6 +4,7 @@ import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.model.Gender;
 import com.oocl.springbootemployee.repository.EmployRepository;
 import org.apache.catalina.core.ApplicationContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
@@ -40,6 +41,13 @@ class EmployeeControllerTest {
     @Autowired
     JacksonTester<Employee> json;
 
+    @BeforeEach
+    void setup(){
+        employRepository.getAll().clear();
+//        employRepository.save(new Employee(1,"name1", 15,Gender.FEMALE,18.0));
+//        employRepository.save(new Employee(2,"name2", 15,Gender.MALE,18.0));
+//        employRepository.save(new Employee(3,"name3", 15,Gender.FEMALE,18.0));
+        }
     @Test
     void should_return_employees_when_getAll_given_employeeRepository() throws Exception {
         //Given
@@ -100,18 +108,17 @@ class EmployeeControllerTest {
                 "    }";
         Employee newEmployee = new Employee(1, "name1", 15, Gender.FEMALE, 18.0);
 
-        final Employee givenEmployee = employRepository.create(newEmployee);
+//        final Employee givenEmployee = employRepository.create(newEmployee);
 
         //When
         String employeeJsonString = client.perform(MockMvcRequestBuilders.post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(employeeJson))
                         .andExpect(MockMvcResultMatchers.status().isCreated())
-                        .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
                         .andReturn().getResponse().getContentAsString();
 
-        List<Employee> employee = jsonList.parseObject(employeeJsonString);
-        assertThat(employee).usingRecursiveComparison().isEqualTo(givenEmployee);
+        Employee employee = json.parseObject(employeeJsonString);
+        assertThat(employee).usingRecursiveComparison().isEqualTo(newEmployee);
         //Then
 
     }
