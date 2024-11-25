@@ -1,8 +1,10 @@
 package com.oocl.springbootemployee.controller;
 
+import com.oocl.springbootemployee.dto.EmployeeUpdateDTO;
 import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.model.Gender;
 import com.oocl.springbootemployee.repository.EmployeeRepository;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,5 +38,10 @@ public class EmployeeController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public Employee create(@RequestBody Employee employee) {
         return this.employeeRepository.create(employee);
+    }
+
+    @PutMapping(path = "{id}")
+    public Employee update(@PathVariable int id, @RequestBody EmployeeUpdateDTO employeeUpdateDTO) {
+        return this.employeeRepository.update(id, employeeUpdateDTO.getAge(), employeeUpdateDTO.getSalary());
     }
 }

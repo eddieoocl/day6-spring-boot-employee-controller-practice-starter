@@ -83,7 +83,8 @@ class EmployeeControllerTest {
 
         // When
         // Then
-        String employeesJsonString = client.perform(MockMvcRequestBuilders.get("/employees").param("gender", "MALE"))
+        String employeesJsonString = client.perform(MockMvcRequestBuilders.get("/employees")
+                        .param("gender", "MALE"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(givenEmployees.size())))
                 .andReturn().getResponse().getContentAsString();
@@ -95,12 +96,14 @@ class EmployeeControllerTest {
     @Test
     void should_return_employee_when_create_employee_given_employee() throws Exception {
         //Given
-        String employeeJson = " {\n" +
-                "        \"name\": \"name1\",\n" +
-                "        \"age\": 15,\n" +
-                "        \"gender\": \"FEMALE\",\n" +
-                "        \"salary\": 18.0\n" +
-                "    }";
+        String employeeJson = """
+                 {
+                    "name": "name1",
+                    "age": 15,
+                    "gender": "FEMALE",
+                    "salary": 18.0
+                 }\
+                """;
         Employee targetEmployee = new Employee(4, "name1", 15, Gender.FEMALE, 18.0);
 
         //When
@@ -113,5 +116,30 @@ class EmployeeControllerTest {
 
         Employee employee = employeeJacksonTester.parseObject(employeeJsonString);
         assertThat(employee).isEqualTo(targetEmployee);
+    }
+
+    @Test
+    void should_return_updated_employee_when_update_employee_given_age_and_salary() throws Exception {
+        //Given
+        String employeeJson = """
+                 {
+                    "age": 15,
+                    "salary": 18.0
+                 }\
+                """;
+        Employee targetEmployee = new Employee(1, "name1", 15, Gender.FEMALE, 18.0);
+
+        //When
+        //Then
+        String employeeJsonString = client.perform(MockMvcRequestBuilders.put("/employees/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(employeeJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        Employee employee = employeeJacksonTester.parseObject(employeeJsonString);
+        assertThat(employee).isEqualTo(targetEmployee);
+        assertThat(employee.getAge()).isEqualTo(targetEmployee.getAge());
+        assertThat(employee.getSalary()).isEqualTo(targetEmployee.getSalary());
     }
 }
