@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class EmployRepository {
+public class EmployeeRepository {
     List<Employee> employees = new ArrayList<>();
 
-    EmployRepository() {
+    EmployeeRepository() {
         employees.add(new Employee(1, "name1", 15, Gender.FEMALE, 18.0));
         employees.add(new Employee(2, "name2", 15, Gender.MALE, 18.0));
         employees.add(new Employee(3, "name3", 15, Gender.FEMALE, 18.0));
