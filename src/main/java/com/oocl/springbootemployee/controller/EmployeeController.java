@@ -4,6 +4,7 @@ import com.oocl.springbootemployee.dto.EmployeeUpdateDTO;
 import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.model.Gender;
 import com.oocl.springbootemployee.repository.EmployeeRepository;
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class EmployeeController {
     }
 
     @PutMapping(path = "{id}")
-    public Employee update(@PathVariable int id, @RequestBody EmployeeUpdateDTO employeeUpdateDTO) {
+    public Employee update(@PathVariable int id, @Valid @RequestBody EmployeeUpdateDTO employeeUpdateDTO) {
         return this.employeeRepository.update(id, employeeUpdateDTO.getAge(), employeeUpdateDTO.getSalary());
     }
 
